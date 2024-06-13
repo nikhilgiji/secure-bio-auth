@@ -1,4 +1,4 @@
-Secure Biometric Fingerprint Authentication using ML
+### Secure Biometric Fingerprint Authentication using ML
 
 
 This project aims to develop a secure fingerprint authentication system utilizing machine learning (ML) to enhance recognition accuracy
