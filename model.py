@@ -1,23 +1,18 @@
-def build_simplified_resnet(input_shape, num_classes):
-    inputs = Input(shape=input_shape)
-    x = Conv2D(64, (7, 7), strides=2, padding='same')(inputs)
-    x = BatchNormalization()(x)
-    x = Activation('relu')(x)
-    x = tf.keras.layers.MaxPooling2D((3, 3), strides=2, padding='same')(x)
+# model.py
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 
-    x = residual_block(x, 64)
-    x = residual_block(x, 64)
-    
-    x = tf.keras.layers.GlobalAveragePooling2D()(x)
-    x = tf.keras.layers.Dense(num_classes, activation='softmax')(x)
-
-    model = Model(inputs, x)
+def create_model(input_shape, num_classes):
+    model = Sequential([
+        Conv2D(32, (3, 3), activation='relu', input_shape=input_shape),
+        MaxPooling2D((2, 2)),
+        Conv2D(64, (3, 3), activation='relu'),
+        MaxPooling2D((2, 2)),
+        Conv2D(128, (3, 3), activation='relu'),
+        MaxPooling2D((2, 2)),
+        Flatten(),
+        Dense(128, activation='relu'),
+        Dropout(0.5),
+        Dense(num_classes, activation='softmax')
+    ])
     return model
-
-# Example usage
-input_shape = (96, 96, 1)  # Grayscale fingerprint images resized to 96x96
-num_classes = 10  # Adjust based on the number of fingerprint classes
-
-model = build_simplified_resnet(input_shape, num_classes)
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-model.summary()
